@@ -3,11 +3,41 @@
 
 using namespace std;
 
+enum ButtonCodes
+{
+RUN_CODE = 101,
+SAVE_CODE = 102,
+OPEN_CODE = 103
+};
+
 LRESULT CALLBACK WindowProcedure(HWND window, UINT uMessage, WPARAM wParameter, LPARAM lParameter) {
     if (uMessage == WM_DESTROY) {
         PostQuitMessage(0);
         return 0;
     }
+
+    switch (uMessage) {
+        case WM_COMMAND: {
+            int wmId = LOWORD(wParameter);
+            int wmEvent = HIWORD(wParameter);
+
+            if (wmEvent == BN_CLICKED) {
+                switch (wmId) {
+                case RUN_CODE:
+                    cout << "RUN!\n";
+                    break;
+                case SAVE_CODE:
+                    cout << "SAVE\n";
+                    break;
+                case OPEN_CODE:
+                    cout << "OPEN\n";
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
     return DefWindowProc(window, uMessage, wParameter, lParameter);
 }
 
@@ -24,18 +54,18 @@ int main() {
     
     // buttons
     HWND hwndRunButton = CreateWindow( L"BUTTON", L"Run Code", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 50, 10, 100, 30, window,
-        NULL,//(HMENU)IDB_MYBUTTON, // Child window ID (used to identify button)  - same for texts
-        NULL,//(HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
+        (HMENU)RUN_CODE,
+        (HINSTANCE)GetWindowLongPtr(window, GWLP_HINSTANCE),
         NULL        
     );
     HWND hwndSaveButton = CreateWindow(L"BUTTON", L"Save Code", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 175, 10, 100, 30, window,
-        NULL,//(HMENU)IDB_MYBUTTON, // Child window ID (used to identify button)  - same for texts
-        NULL,//(HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
+        (HMENU)SAVE_CODE,
+        (HINSTANCE)GetWindowLongPtr(window, GWLP_HINSTANCE),
         NULL
     );
     HWND hwndOpenButton = CreateWindow(L"BUTTON", L"Open Code", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 300, 10, 100, 30, window,
-        NULL,//(HMENU)IDB_MYBUTTON, // Child window ID (used to identify button)  - same for texts
-        NULL,//(HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
+        (HMENU)OPEN_CODE, 
+        (HINSTANCE)GetWindowLongPtr(window, GWLP_HINSTANCE),
         NULL
     );
 
