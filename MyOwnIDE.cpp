@@ -1,4 +1,6 @@
 #include <iostream>
+#include <tchar.h>
+#include <string>
 #include <Windows.h>
 
 using namespace std;
@@ -10,11 +12,18 @@ SAVE_CODE = 102,
 OPEN_CODE = 103
 };
 
+
+HWND codeText;
+HWND saveText;
+
 LRESULT CALLBACK WindowProcedure(HWND window, UINT uMessage, WPARAM wParameter, LPARAM lParameter) {
     if (uMessage == WM_DESTROY) {
         PostQuitMessage(0);
         return 0;
     }
+
+    // Get the length of the text (in characters)
+    int lengthOfCode = GetWindowTextLength(codeText);
 
     switch (uMessage) {
         case WM_COMMAND: {
@@ -28,6 +37,21 @@ LRESULT CALLBACK WindowProcedure(HWND window, UINT uMessage, WPARAM wParameter, 
                     break;
                 case SAVE_CODE:
                     cout << "SAVE\n";
+
+                    if (lengthOfCode > 0) {
+                        // Allocate buffer (add 1 for the null terminator)
+                        TCHAR* buffer = new TCHAR[lengthOfCode + 1];
+
+                        // Retrieve the text
+                        GetWindowText(codeText, buffer, lengthOfCode + 1);
+
+                        // debug print
+                        _tprintf(_T("%s\n"), buffer);
+
+                        // Free the memory
+                        delete[] buffer;
+                    }
+
                     break;
                 case OPEN_CODE:
                     cout << "OPEN\n";
@@ -72,6 +96,10 @@ int main() {
     // text inputs
     HWND hSavePath = CreateWindow(L"EDIT", L"", WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT | ES_AUTOVSCROLL | WS_BORDER, 50, 45, 700, 25, window, NULL, NULL, NULL);
     HWND hEdit = CreateWindow(L"EDIT", L"", WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL | WS_BORDER, 50, 75, 700, 475, window, NULL, NULL, NULL);
+    
+    codeText = hEdit;
+
+    // shwo window
     ShowWindow(window, 1);
 
     MSG msg = {};
