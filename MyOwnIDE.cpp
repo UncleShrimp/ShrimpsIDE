@@ -19,8 +19,29 @@ int main() {
     windowClass.lpszClassName = L"MyClass";
     RegisterClass(&windowClass);
 
+    // main window
     HWND window = CreateWindowW(L"MyClass", L"MyIDE", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, 500, 500, 800, 600, NULL, NULL, NULL, NULL);
-    HWND hEdit = CreateWindow(L"EDIT", L"", WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL | WS_BORDER, 50, 25, 700, 500, window, NULL, NULL, NULL);
+    
+    // buttons
+    HWND hwndRunButton = CreateWindow( L"BUTTON", L"Run Code", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 50, 10, 100, 30, window,
+        NULL,//(HMENU)IDB_MYBUTTON, // Child window ID (used to identify button)  - same for texts
+        NULL,//(HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
+        NULL        
+    );
+    HWND hwndSaveButton = CreateWindow(L"BUTTON", L"Save Code", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 175, 10, 100, 30, window,
+        NULL,//(HMENU)IDB_MYBUTTON, // Child window ID (used to identify button)  - same for texts
+        NULL,//(HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
+        NULL
+    );
+    HWND hwndOpenButton = CreateWindow(L"BUTTON", L"Open Code", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 300, 10, 100, 30, window,
+        NULL,//(HMENU)IDB_MYBUTTON, // Child window ID (used to identify button)  - same for texts
+        NULL,//(HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
+        NULL
+    );
+
+    // text inputs
+    HWND hSavePath = CreateWindow(L"EDIT", L"", WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT | ES_AUTOVSCROLL | WS_BORDER, 50, 45, 700, 25, window, NULL, NULL, NULL);
+    HWND hEdit = CreateWindow(L"EDIT", L"", WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL | WS_BORDER, 50, 75, 700, 475, window, NULL, NULL, NULL);
     ShowWindow(window, 1);
 
     MSG msg = {};
